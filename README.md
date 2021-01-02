@@ -5,6 +5,17 @@ Simple online nursery marketplace API  built using Django
 
 Checkout this repo, install dependencies, then start the server:
 
+# How to Install and Run this project?
+
+#Pre-Requisites:
+
+--> Install Git Version Control [ https://git-scm.com/ ]
+
+--> Install Python Latest Version [ https://www.python.org/downloads/ ]
+
+--> Install Pip (Package Manager) [ https://pip.pypa.io/en/stable/installing/ ]
+
+
 # Installation
 1.git clone https://github.com/KARISHMASHINDE/e-nursery-.git
 2.cd ecommerce-django
