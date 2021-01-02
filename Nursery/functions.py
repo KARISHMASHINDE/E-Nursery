@@ -5,6 +5,7 @@ import os
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import AnonymousUser
+from Nursery.models import CustomUser
 
 
 
@@ -35,7 +36,8 @@ def createResponse(status, message, data, typeOfData):
 def authenticate_user(user, typ):
     if isinstance(user, AnonymousUser):
         return False
-    if user.role != typ:
+    div = CustomUser.objects.get(user = user)
+    if div.role != typ:
         return False
     return True
 
@@ -46,3 +48,9 @@ class IsUser(IsAuthenticated):
             return False
         return bool(request.user)
 
+
+class IsOwner(IsAuthenticated):
+    def has_permission(self, request, view):
+        if not authenticate_user(request.user, "NursuryOwner"):
+            return False
+        return bool(request.user)

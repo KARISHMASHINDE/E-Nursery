@@ -142,4 +142,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+
+SENDINBLUE_API_KEY = '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'
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL ='/media/'
