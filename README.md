@@ -45,7 +45,7 @@ For User
 
 For Nurseries
 
--Nursery owner can register.
+-Nursery owner can register(Nursery name is Mandetory.
 
 -Nursery owner can Login.
 
