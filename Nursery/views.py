@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from Nursery.functions import createResponse, get_tokens_for_user
 from Nursery.models import Plant
-from Nursery.serializers import UserRegisterSerializer, LoginSerializer, PlantSerializer
+from Nursery.serializers import UserRegisterSerializer, LoginSerializer, PlantSerializer,NurseryRegisterSerializer
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 
@@ -23,6 +24,19 @@ class registration_view(APIView):
             return createResponse(False, "Registration Failed", serializer.errors, "errors")
         return createResponse(True, "User Successfully Registered", {'details': serializer.data, 'access': access}, 'data')
     
+class Nurseryregistration_view(APIView):
+    def post(self, request, format=None):
+        serializer = NurseryRegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            user = User.objects.get(username=request.data['username'])
+            refresh = get_tokens_for_user(user)
+            access = refresh['access']
+        else:
+            return createResponse(False, "Registration Failed", serializer.errors, "errors")
+        return createResponse(True, "Nursery Successfully Registered", {'details': serializer.data, 'access': access}, 'data')
+
+
 class Login(APIView):
     def post(self, request, format=None):    
         serializer = LoginSerializer(data=request.data)
@@ -40,8 +54,8 @@ class Login(APIView):
         
         
 class PlantList(APIView):
-    # authentication_classes = [JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         obj = Plant.objects.all()

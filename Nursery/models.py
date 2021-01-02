@@ -16,14 +16,22 @@ class Plant(models.Model):
     def __str__(self):
         return self.name
     
-class NurseryPlant(models.Model):
+    
+class NurseryDetails(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     nurseryName = models.CharField(max_length=100)
+
+    
+    def __str__(self):
+        return self.nurseryName
+    
+class NurseryPlant(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    nurseryName = models.ForeignKey(NurseryDetails,on_delete=models.CASCADE)
     plant = models.ForeignKey(Plant,on_delete=models.CASCADE)
     image = models.ImageField(upload_to='PlantImage')
     price = models.FloatField()
     
-    
     def __str__(self):
-        return self.nurseryName
+        return self.id
 
