@@ -26,7 +26,8 @@ Checkout this repo, install dependencies, then start the server:
 7.python manage.py runserver
 
 # Features of this Project
-For User 
+For User
+ 
 -User can register.
 -User can Login.(same for Nuseries also)
 -User can view the list of plant along with Nurseries.
