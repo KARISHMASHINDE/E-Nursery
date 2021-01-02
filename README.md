@@ -27,7 +27,6 @@ Checkout this repo, install dependencies, then start the server:
 
 # Features of this Project
 For User
- 
 -User can register.
 -User can Login.(same for Nuseries also)
 -User can view the list of plant along with Nurseries.
