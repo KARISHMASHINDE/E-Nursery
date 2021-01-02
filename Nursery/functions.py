@@ -51,6 +51,6 @@ class IsUser(IsAuthenticated):
 
 class IsOwner(IsAuthenticated):
     def has_permission(self, request, view):
-        if not authenticate_user(request.user, "NursuryOwner"):
+        if not authenticate_user(request.user, "NurseryOwner"):
             return False
         return bool(request.user)

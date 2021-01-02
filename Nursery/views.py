@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from Nursery.functions import createResponse, get_tokens_for_user
-from Nursery.models import Plant
-from Nursery.serializers import UserRegisterSerializer, LoginSerializer, PlantSerializer,NurseryRegisterSerializer
+from Nursery.functions import createResponse, get_tokens_for_user, IsOwner
+from Nursery.models import Plant,NurseryPlant
+from Nursery.serializers import UserRegisterSerializer,AddPlantSerializer,GetNurseryPlant, LoginSerializer, PlantSerializer,NurseryRegisterSerializer
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
@@ -60,4 +60,26 @@ class PlantList(APIView):
     def get(self, request, format=None):
         obj = Plant.objects.all()
         serializer = PlantSerializer(obj, many=True)
+        return createResponse(True, 'Sucess', serializer.data, 'data')
+    
+    
+    
+class AddPlant(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsOwner]
+
+    def post(self, request):
+        serializer = AddPlantSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return createResponse(True, "Success", serializer.data, 'data')
+        else:
+            return createResponse(False, "Fail", serializer.errors, 'errors')
+        
+        
+class NurseryPlantList(APIView):
+
+    def get(self, request, format=None):
+        obj = NurseryPlant.objects.all()
+        serializer = GetNurseryPlant(obj, many=True)
         return createResponse(True, 'Sucess', serializer.data, 'data')

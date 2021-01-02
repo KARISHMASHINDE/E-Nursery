@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from Nursery.models import CustomUser,Plant, NurseryDetails
+from Nursery.models import CustomUser,Plant, NurseryDetails, NurseryPlant
 
 
 
@@ -40,11 +40,15 @@ class LoginSerializer(serializers.Serializer):
         user = User.objects.get(username=validated_data['username'])
         return user
     
-class PlantSerializer(serializers.ModelSerializer):
-    
+class PlantSerializer(serializers.ModelSerializer):   
     class Meta:
         model = Plant
         fields = ['id','name']
+        
+class NurseryDetailsGetSerializer(serializers.ModelSerializer):   
+    class Meta:
+        model = NurseryDetails
+        fields = ['id','nurseryName','user']
         
         
 
@@ -65,8 +69,39 @@ class NurseryRegisterSerializer(serializers.ModelSerializer):
         password = self.validated_data['password']
         user.set_password(password)
         user.save()
-        div = CustomUser(user=user,role='NursuryOwner')
+        div = CustomUser(user=user,role='NurseryOwner')
         transdiv = NurseryDetails(user=user , nurseryName=self.validated_data['nurseryName'])
         div.save()
         transdiv.save()
         return user
+    
+class AddPlantSerializer(serializers.ModelSerializer):
+    nurseryName = serializers.IntegerField(required=True,write_only=True)
+    plant = serializers.IntegerField(required=True,write_only=True)
+    price = serializers.FloatField(required=True)
+    image = serializers.ImageField(required=True)
+    class Meta:
+        model = NurseryPlant
+        fields = ['id', 'nurseryName', 'plant', 'image', 'price']
+        
+    def create(self, validated_data):
+
+        self.nurseryName = NurseryDetails.objects.get(id=self.validated_data['nurseryName'])
+        self.plant = Plant.objects.get(id=self.validated_data['plant'])
+        transdiv = NurseryPlant(nurseryName=self.nurseryName,
+                                image=self.validated_data['image'],
+                                plant=self.plant,
+                                price=self.validated_data['price'],)
+        transdiv.save()
+        return transdiv
+    
+
+    
+    
+class GetNurseryPlant(serializers.ModelSerializer):
+    nurseryName = NurseryDetailsGetSerializer()
+    plant = PlantSerializer()
+
+    class Meta:
+        model = NurseryPlant
+        fields = ['id', 'image', 'price', 'nurseryName', 'plant']
