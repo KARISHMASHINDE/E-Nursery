@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from Nursery.models import CustomUser,Plant, NurseryDetails, NurseryPlant
+from Nursery.models import CustomUser,Plant, NurseryDetails, NurseryPlant,Cart
 
 
 
@@ -105,3 +105,30 @@ class GetNurseryPlant(serializers.ModelSerializer):
     class Meta:
         model = NurseryPlant
         fields = ['id', 'image', 'price', 'nurseryName', 'plant']
+        
+        
+class AddToCartSerializer(serializers.ModelSerializer):
+    items = serializers.ListField(required=True,write_only=True)
+    buyer = serializers.IntegerField(required=True)
+    
+    class Meta:
+        model = Cart
+        fields = ['id', 'buyer', 'items', 'quantity']
+        
+    def validate(self, attrs):
+        items=attrs['items']
+        for x in items:
+            pass
+        return attrs
+
+        
+    def create(self, validated_data):
+        transdiv = Cart.objects.create(quantity=self.validated_data['quantity'],buyer=User.objects.get(id=self.validated_data['buyer']))
+        transdiv.save()
+        items = validated_data.pop("items",None)
+        for x in items:
+            obj = NurseryPlant.objects.get(id =x)
+        transdiv.items.add(obj)
+        return validated_data
+        
+        

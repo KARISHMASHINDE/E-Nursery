@@ -31,5 +31,15 @@ class NurseryPlant(models.Model):
     image = models.ImageField(upload_to='PlantImage')
     price = models.FloatField()
     
+    
+class Cart(models.Model):
+    id = models.AutoField(primary_key=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    buyer = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+    items = models.ManyToManyField(NurseryPlant)
+    quantity = models.IntegerField()
+    
+
+    
 
 
