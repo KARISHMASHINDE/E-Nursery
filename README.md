@@ -1,7 +1,7 @@
 # e-nursery
 
 # Objectives
-Simple online nursery marketplace API  built using Django,Authentication Done by using JWT token
+Simple online nursery marketplace API  built using Django. Authentication Done by using JWT token.
 
 Checkout this repo, install dependencies, then start the server:
 
