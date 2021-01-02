@@ -25,3 +25,17 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         div = CustomUser(user=user,role='User')
         div.save()
         return user
+    
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)
+
+    def validate(self, attrs):
+        user = authenticate(password=attrs['password'], username=attrs['username'])
+        if not user:
+            raise serializers.ValidationError("Invalid credentials")
+        return attrs
+
+    def create(self, validated_data):
+        user = User.objects.get(username=validated_data['username'])
+        return user
