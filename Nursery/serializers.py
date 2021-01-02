@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from Nursery.models import CustomUser
+from Nursery.models import CustomUser,Plant
 
 
 
@@ -39,3 +39,9 @@ class LoginSerializer(serializers.Serializer):
     def create(self, validated_data):
         user = User.objects.get(username=validated_data['username'])
         return user
+    
+class PlantSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Plant
+        fields = ['id','name']

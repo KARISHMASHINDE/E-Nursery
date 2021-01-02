@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from Nursery.functions import createResponse, get_tokens_for_user
-from Nursery.serializers import UserRegisterSerializer, LoginSerializer
+from Nursery.models import Plant
+from Nursery.serializers import UserRegisterSerializer, LoginSerializer, PlantSerializer
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated
+
 
 
 
@@ -34,3 +37,13 @@ class Login(APIView):
                                    'access': access}, 'data')
         else:
             return createResponse(False, "Login failed", serializer.errors, "errors")
+        
+        
+class PlantList(APIView):
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        obj = Plant.objects.all()
+        serializer = PlantSerializer(obj, many=True)
+        return createResponse(True, 'Sucess', serializer.data, 'data')
